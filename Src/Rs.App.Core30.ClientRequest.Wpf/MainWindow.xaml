@@ -1,0 +1,43 @@
+﻿<Window x:Class="Rs.App.Core30.ClientRequest.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Rs.App.Core30.ClientRequest.Wpf"
+        mc:Ignorable="d"
+        Title="Client's Request Management" Height="450" Width="800" MaxHeight="450" MaxWidth="800" MinHeight="450" MinWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="191"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+
+        <ToolBarPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="Black">
+            <ToolBarTray Height="61" >
+                <ToolBar Height="61" VerticalAlignment="Center" Width="368">
+                    <Button Content="Add Client"/>
+                    <Button Content="Edit Client"/>
+                    <Button Content="Delete Client"/>
+                </ToolBar>
+            </ToolBarTray>
+        </ToolBarPanel>
+        <ListBox x:Name="ClientListBox" Grid.Row="1" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=LastName}">
+                        </TextBlock>
+                        <TextBlock Text=", "></TextBlock>
+                        <TextBlock Text="{Binding Path=Name}">
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</Window>
