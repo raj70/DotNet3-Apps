@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Rs.App.Core30.ClientRequest.Wpf"
         mc:Ignorable="d"
-        Title="Client's Request Management" Height="450" Width="800" MaxHeight="450" MaxWidth="800" MinHeight="450" MinWidth="800">
+        Title="Client's Request Management" Height="450" Width="800" MaxHeight="450" MaxWidth="800" MinHeight="450" MinWidth="800" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="191"/>
@@ -19,13 +19,13 @@
         <ToolBarPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="Black">
             <ToolBarTray Height="61" >
                 <ToolBar Height="61" VerticalAlignment="Center" Width="368">
-                    <Button Content="Add Client"/>
-                    <Button Content="Edit Client"/>
-                    <Button Content="Delete Client"/>
+                    <Button x:Name="ButtonAdd" Content="Add Client" Click="ButtonAdd_Click"/>
+                    <Button x:Name="ButtonEdit" Content="Edit Client" Click="ButtonEdit_Click"/>
+                    <Button x:Name="ButtonDelete" Content="Delete Client" Click="ButtonDelete_Click"/>
                 </ToolBar>
             </ToolBarTray>
         </ToolBarPanel>
-        <ListBox x:Name="ClientListBox" Grid.Row="1" >
+        <ListBox x:Name="ClientListBox" Grid.Row="1" SelectionChanged="ClientListBox_SelectionChanged" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
@@ -38,6 +38,8 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
+        <StackPanel x:Name="MainStackPanel" Grid.Row="1" Grid.Column="1" >
+            
+        </StackPanel>
     </Grid>
 </Window>

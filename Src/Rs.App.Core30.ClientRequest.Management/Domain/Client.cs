@@ -21,14 +21,22 @@ namespace Rs.App.Core30.ClientRequest.Management.Domain
         {
             bool equal = false;
             var o = obj as Client;
-            if(o.ClientId == ClientId 
-                && o.Name == Name 
-                && o.MiddleName == MiddleName 
-                && o.LastName == LastName)
+            if (o != null)
             {
-                equal = true;
+                if (o.ClientId == ClientId
+                    && o.Name == Name
+                    && o.MiddleName == MiddleName
+                    && o.LastName == LastName)
+                {
+                    equal = true;
+                }
             }
             return equal;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

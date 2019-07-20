@@ -1,4 +1,5 @@
 ﻿using Json.Net;
+using Newtonsoft.Json;
 using Rs.App.Core30.ClientRequest.Management.Domain;
 using System;
 using System.Collections.Generic;
@@ -32,20 +33,19 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
             {
                 using (var stream = new StreamReader(_fileName))
                 {
-                    _clients = JsonNet.Deserialize<Clients>(stream);
+                    var values = stream.ReadToEnd();
+                    var clients = JsonConvert.DeserializeObject<Clients>(values);
+                    clients.ForEach(x => {
+                        _clients.Add(x);
+                    });
                 }
-            }
-            else
-            {
-                _clients.Add(new Client() { LastName ="Shrestha", MiddleName="", Name="Rajen" });
-                _clients.Add(new Client() { LastName = "Shrestha", MiddleName = "", Name = "Zuzana" });
             }
         }
 
         public void Save()
         {
-            var clientStringfy = JsonNet.Serialize(_clients);
-            if (!string.IsNullOrWhiteSpace(clientStringfy))
+            var clientStringfy = JsonNet.Serialize(_clients, new GuidConverter());
+            if (string.IsNullOrWhiteSpace(clientStringfy))
             {
                 return;
             }
@@ -53,6 +53,29 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
             {
                 stream.Write(clientStringfy);
             }
+        }
+    }
+
+    public class GuidConverter : IJsonConverter
+    {
+        public object Deserializer(string txt)
+        {
+            return Guid.Parse(txt);
+        }
+
+        public Type GetConvertingType()
+        {
+            return typeof(Guid);
+        }
+
+        public string Serializer(object obj)
+        {
+            if(obj == null)
+            {
+                return Guid.NewGuid().ToString();
+            }
+
+           return Guid.Parse(obj.ToString()).ToString();
         }
     }
 }
