@@ -9,6 +9,8 @@
   <ItemGroup>
     <None Remove="UserControls\UcClient.xaml" />
     <None Remove="UserControls\UcClientAddEdit.xaml" />
+    <None Remove="UserControls\UcRequestAddEdit.xaml" />
+    <None Remove="UserControls\UcRequests.xaml" />
   </ItemGroup>
 
   <ItemGroup>

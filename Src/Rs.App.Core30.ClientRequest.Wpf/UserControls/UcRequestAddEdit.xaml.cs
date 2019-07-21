@@ -1,5 +1,4 @@
-﻿using Rs.App.Core30.ClientRequest.Management.Domain;
-using Rs.App.Core30.ClientRequest.Wpf.ViewModel;
+﻿using Rs.App.Core30.ClientRequest.Wpf.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,32 +15,27 @@ using System.Windows.Shapes;
 namespace Rs.App.Core30.ClientRequest.Wpf.UserControls
 {
     /// <summary>
-    /// Interaction logic for UcClientAddEdit.xaml
+    /// Interaction logic for UcRequestAddEdit.xaml
     /// </summary>
-    public partial class UcClientAddEdit : UserControl
+    public partial class UcRequestAddEdit : UserControl
     {
-        protected ClientViewModel vm;
-        public Action<Client> AddEdit;
-
-        public UcClientAddEdit()
+        protected RequestViewModel _requestViewModel;
+        public UcRequestAddEdit()
         {
             InitializeComponent();
+           
         }
 
-        public UcClientAddEdit(ClientViewModel client) : this()
+        public void SetDataContext(RequestViewModel vm)
         {
-            vm = client;
-            DataContext = client;
+            _requestViewModel = vm;
+            DataContext = vm;
         }
+        
 
         private void ButtonOk_Click(object sender, RoutedEventArgs e)
         {
-            var client = vm.Client;
-
-            if (vm.IsValidate())
-            {
-                AddEdit?.Invoke(client);
-            }
+            _requestViewModel.Add();
         }
     }
 }

@@ -22,8 +22,10 @@ namespace Rs.App.Core30.ClientRequest.Wpf.UserControls
     {
         private EditType _editType;
         private ClientViewModel _client;
+        private Guid _currentClientId;
 
-        public Action<Guid> Delete;
+        public Action<Guid> ShowRequests;
+        public Action<Guid> AddRequest;
 
         public UcClient()
         {
@@ -35,23 +37,27 @@ namespace Rs.App.Core30.ClientRequest.Wpf.UserControls
             _editType = editType;
             _client = client;
             DataContext = _client;
-
-            if(_editType == EditType.Delete)
-            {
-                ButtonOk.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ButtonOk.Visibility = Visibility.Hidden;
-            }
+            _currentClientId = client.Client.ClientId;
         }
 
-        private void ButtonOk_Click(object sender, RoutedEventArgs e)
+        private void ButtonShowRequests_Click(object sender, RoutedEventArgs e)
         {
-            var vm = DataContext as ViewModel.ClientViewModel;
-            var clientId = vm.Client.ClientId;
+            if (_currentClientId == Guid.Empty)
+            {
+                //TODO: do something
+                return;
+            }
+            ShowRequests?.Invoke(_currentClientId);
+        }
 
-            Delete?.Invoke(clientId);
+        private void ButtonAddRequest_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentClientId == Guid.Empty)
+            {
+                //TODO: do something
+                return;
+            }
+            AddRequest?.Invoke(_currentClientId);
         }
     }
 }

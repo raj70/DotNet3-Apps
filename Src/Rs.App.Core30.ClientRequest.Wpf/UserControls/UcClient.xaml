@@ -29,7 +29,14 @@
             <Label x:Name="MiddleNameLabel" Content="{Binding Path=MiddleName}"  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
             <Label Content="Last Name:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <Label x:Name="LastNameLabel" Content="{Binding Path=LastName}"  Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
-            <Button x:Name="ButtonOk" Grid.Row="3" Grid.Column="1" Click="ButtonOk_Click">Ok</Button>
+            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="202*"/>
+                    <ColumnDefinition Width="202*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="ButtonAddRequest" Grid.Row="0" Grid.Column="0" Click="ButtonAddRequest_Click">Add Request</Button>
+                <Button x:Name="ButtonShowRequests" Grid.Row="0" Grid.Column="1" Click="ButtonShowRequests_Click">All Requests</Button>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

@@ -28,6 +28,7 @@ namespace Rs.App.Core30.ClientRequest.Wpf
     public partial class MainWindow : Window
     {
         private IRepository<Client> _clientRepo;
+        private IRequestRepository _requestRepo;
         private Client _selectedClient;
         private EditType _editType = EditType.Add;
 
@@ -35,6 +36,7 @@ namespace Rs.App.Core30.ClientRequest.Wpf
         {
             InitializeComponent();
             _clientRepo = new ClientRepository();
+            _requestRepo = new RequestRepository();
 
             //yaak // not used MVVM for now
             this.ClientListBox.ItemsSource = _clientRepo.GetAll();
@@ -52,6 +54,7 @@ namespace Rs.App.Core30.ClientRequest.Wpf
             }
         }
 
+        #region Orchesters
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
             var newClient = new Client();
@@ -75,16 +78,17 @@ namespace Rs.App.Core30.ClientRequest.Wpf
             {
                 return;
             }
+            _clientRepo.Delete(_selectedClient.ClientId);
             _editType = EditType.Delete;
-            ShowClientInfor(_selectedClient);
-           
+            _selectedClient = null;
         }
 
         private void ShowClientInfor(Client newClient)
         {
             var clientViewModel = new ClientViewModel(newClient);
             var uc = new UcClient(clientViewModel, _editType);
-            uc.Delete = Delete;
+            uc.AddRequest = AddRequestDelegate;
+            uc.ShowRequests = ShowAllRequestDelegate;
             var mainStack = MainStackPanel;
             mainStack.Children.Clear();
 
@@ -103,7 +107,9 @@ namespace Rs.App.Core30.ClientRequest.Wpf
             mainStack.Children.Add(uc);
             DisableEnable();
         }
+        #endregion
 
+        #region Delegates
         private void AddEdit(Client client)
         {
             if (_editType == EditType.Add)
@@ -116,14 +122,48 @@ namespace Rs.App.Core30.ClientRequest.Wpf
             }
             Refresh();
         }
-
-        private void Delete(Guid id)
+        
+        private void AddRequestDelegate(Guid id)
         {
-            _clientRepo.Delete(id);
-            _selectedClient = null;
-            Refresh();
+            if (_selectedClient == null)
+            {
+                return;
+            }
+
+            var vm = new RequestViewModel(_requestRepo);
+            vm.ClientId = _selectedClient.ClientId;
+            vm.Initialise();
+
+            var uc = new UcRequestAddEdit();
+            uc.SetDataContext(vm);
+
+            var mainStack = MainStackPanel;
+            mainStack.Children.Clear();
+
+            mainStack.Children.Add(uc);
+
         }
 
+        private void ShowAllRequestDelegate(Guid id)
+        {
+            if (_selectedClient == null)
+            {
+                return;
+            }
+            
+            var vm = new RequestsViewModel(_requestRepo);
+            vm.ClientId = _selectedClient.ClientId;
+            vm.Initialise();
+
+            var uc = new UcRequests();
+            uc.SetDataContext(vm);
+
+            var mainStack = MainStackPanel;
+            mainStack.Children.Clear();
+
+            mainStack.Children.Add(uc);
+        }
+        #endregion
 
         private void DisableEnable()
         {

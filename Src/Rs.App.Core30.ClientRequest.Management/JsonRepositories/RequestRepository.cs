@@ -1,5 +1,6 @@
 ﻿using Json.Net;
 using Rs.App.Core30.ClientRequest.Management.Domain;
+using Rs.App.Core30.ClientRequest.Management.Repositories;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,32 +11,21 @@ using System.Text;
 
 namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
 {
-    public class RequestRepository : IJsonDataFile<Request>
+    public interface IRequestRepository: IRepository<Request>
+    {
+        List<Request> GetAll(Guid clientId);
+    }
+
+    public class RequestRepository : IRequestRepository
     {
         private Requests _requests;
-        private string _fileName;
-
-        public string FileName
-        {
-            get
-            {
-                return _fileName;
-            }
-        }
-
-        public Requests Requests
-        {
-            get
-            {
-                return _requests;
-            }
-        }
+        private IJsonDataFile<Request> _jsonDataFile;
+       
 
         public RequestRepository()
         {
             _requests = new Requests();
-            _fileName = "Requests.json";
-            Initialise();
+            _jsonDataFile = new JsonDataRequest(_requests);
         }
 
         public void Add(Request model)
@@ -43,6 +33,7 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
             if (!_requests.Contains(model))
             {
                 _requests.Add(model);
+                _jsonDataFile.Save();
             }
         }
 
@@ -52,11 +43,24 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
             if(client != null)
             {
                 _requests.Remove(client);
+                _jsonDataFile.Save();
             }
+        }
+
+        public Request Get(Guid id)
+        {
+            return _requests.Where(x => x.RequestId == id).FirstOrDefault();
+        }
+
+        public List<Request> GetAll(Guid clientId)
+        {
+            _jsonDataFile.Initialise();
+            return _requests.Where(x => x.ClientId == clientId).DefaultIfEmpty().ToList();
         }
 
         public List<Request> GetAll()
         {
+            _jsonDataFile.Initialise();
             return _requests;
         }
         
@@ -65,46 +69,14 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
             var request = _requests.Where(x => x.RequestId == id).FirstOrDefault();
             if(request != null)
             {
-                request.Name = model.Name == "" ? request.Name : model.Name;
+                request.Title = model.Title == "" ? request.Title : model.Title;
                 request.Priority = model.Priority;
                 request.Description = model.Description == "" ? request.Description : model.Description;
                 request.Comments = model.Comments == "" ? request.Comments : model.Comments;
+                _jsonDataFile.Save();
             }
         }
-
-        public void Initialise()
-        {
-            if (File.Exists(this._fileName))
-            {
-                using (var stream = new StreamReader(_fileName))
-                {
-                    _requests = JsonNet.Deserialize<Requests>(stream);
-                }
-            }
-        }
-
-        public void Save()
-        {
-            var requestStringfy = JsonNet.Serialize(_requests);
-            if (!string.IsNullOrWhiteSpace(requestStringfy))
-            {
-                return;
-            }
-            using (var stream = new StreamWriter(_fileName, false, Encoding.UTF8))
-            {
-                stream.Write(requestStringfy);
-            }
-        }
-
-        private string Serialise(Request client)
-        {
-            return JsonNet.Serialize(client);
-        }
-
-        private Request Deserialise(string value)
-        {
-            return JsonNet.Deserialize<Request>(value);
-        }
+        
     }
 
     public class Requests : List<Request>
