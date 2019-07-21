@@ -1,0 +1,38 @@
+@page "/client/{Id}"
+
+@using Rs.App.Core30.ClientRequest.Blazor.Data
+@using Rs.App.Core30.ClientRequest.Management.Domain
+@inject ClientService ClientService
+
+<h3>Client</h3>
+<NavLink href="/Clients" class="nav-link">
+    <span class="oi oi-people" aria-hidden="true"></span> Clients
+</NavLink>
+<div class="container">
+    <form>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input  class="form-control" id="name" disabled value="@client.Name" />
+        </div>
+        <div class="form-group">
+            <label for="middleName">Middle Name</label>
+            <input  class="form-control" id="middleName" disabled value="@client.MiddleName" />
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input  class="form-control" id="lastName" disabled value="@client.LastName" />
+        </div>
+    </form>
+</div>
+
+@code {
+    [Parameter]
+    string Id { get; set; }
+
+    Client client;
+
+    protected override async Task OnInitAsync()
+    {
+        this.client = await ClientService.GetAsync(Id);
+    }
+}

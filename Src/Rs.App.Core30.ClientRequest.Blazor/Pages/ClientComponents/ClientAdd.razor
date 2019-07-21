@@ -1,0 +1,54 @@
+@page  "/Client/Add"
+@using Rs.App.Core30.ClientRequest.Blazor.Data
+@using Rs.App.Core30.ClientRequest.Management.Domain
+@inject ClientService ClientService
+
+<h3>Add New Client</h3>
+<NavLink href="/Clients" class="nav-link">
+    <span class="oi oi-people" aria-hidden="true"></span> Clients
+</NavLink>
+<div class="container">
+
+    <form @onsubmit="@(e => Submit(e))">
+        <div class="form-group">
+            <label for="name">Name</label>
+            @*https://docs.microsoft.com/en-au/aspnet/core/blazor/components?view=aspnetcore-3.0#data-binding*@
+            <input class="form-control" id="name" placeholder="name" @bind-value="Name" @bind-value:event="oninput" />
+        </div>
+        <div class="form-group">
+            <label for="middleName">Middle Name</label>
+            <input  class="form-control" id="middleName" placeholder="Middle Name" @bind-value="MiddleName" @bind-value:event="oninput" />
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input  class="form-control" id="lastName" placeholder="Last Name" @bind-value="LastName" @bind-value:event="oninput" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" />
+        </div>
+    </form>
+
+</div>
+
+@code {
+    [Parameter]
+    string Name { get; set; }
+
+    [Parameter]
+    string MiddleName { get; set; }
+
+    [Parameter]
+    string LastName { get; set; }
+
+    Client client;
+
+
+    async void Submit(UIEventArgs e)
+    {
+        client = new Client();
+        client.Name = Name;
+        client.MiddleName = MiddleName;
+        client.LastName = LastName;
+        await ClientService.AddAsync(client);
+    }
+}

@@ -1,6 +1,7 @@
 ﻿using Json.Net;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Rs.App.Core30.ClientRequest.Management.Domain
@@ -13,8 +14,10 @@ namespace Rs.App.Core30.ClientRequest.Management.Domain
         }
 
         public Guid ClientId { get; set; } = Guid.NewGuid();
+        [Required]
         public string Name { get; set; }
         public string MiddleName { get; set; }
+        [Required]
         public string LastName { get; set; }
 
         public override bool Equals(object obj)

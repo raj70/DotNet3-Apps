@@ -3,9 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29111.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rs.App.Core30.ClientRequest.Management", "Src\Rs.App.Core30.ClientRequest.Management\Rs.App.Core30.ClientRequest.Management.csproj", "{F5DFFCBE-3FE0-40A7-8F67-E06A8134C4FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rs.App.Core30.ClientRequest.Management", "Src\Rs.App.Core30.ClientRequest.Management\Rs.App.Core30.ClientRequest.Management.csproj", "{F5DFFCBE-3FE0-40A7-8F67-E06A8134C4FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rs.App.Core30.ClientRequest.Wpf", "Src\Rs.App.Core30.ClientRequest.Wpf\Rs.App.Core30.ClientRequest.Wpf.csproj", "{816749AA-0B72-4987-B69C-62786D97C391}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rs.App.Core30.ClientRequest.Wpf", "Src\Rs.App.Core30.ClientRequest.Wpf\Rs.App.Core30.ClientRequest.Wpf.csproj", "{816749AA-0B72-4987-B69C-62786D97C391}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{49E5734F-7AF6-4752-AB1C-DC9838CDD83F}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rs.App.Core30.ClientRequest.Blazor", "Src\Rs.App.Core30.ClientRequest.Blazor\Rs.App.Core30.ClientRequest.Blazor.csproj", "{EAD7CF34-7D02-4B52-8487-6524DA37ECFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +28,10 @@ Global
 		{816749AA-0B72-4987-B69C-62786D97C391}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{816749AA-0B72-4987-B69C-62786D97C391}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{816749AA-0B72-4987-B69C-62786D97C391}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAD7CF34-7D02-4B52-8487-6524DA37ECFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAD7CF34-7D02-4B52-8487-6524DA37ECFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAD7CF34-7D02-4B52-8487-6524DA37ECFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAD7CF34-7D02-4B52-8487-6524DA37ECFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

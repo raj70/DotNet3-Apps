@@ -1,0 +1,60 @@
+@page  "/Client/Edit/{Id}"
+@using Rs.App.Core30.ClientRequest.Blazor.Data
+@using Rs.App.Core30.ClientRequest.Management.Domain
+@inject ClientService ClientService
+
+<h3>Edit Client</h3>
+<NavLink href="/Clients" class="nav-link">
+    <span class="oi oi-people" aria-hidden="true"></span> Clients
+</NavLink>
+<div class="container">
+
+    <form @onsubmit="@(e => Submit(e))">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input class="form-control" id="name" placeholder="name" @bind="@Name" />
+        </div>
+        <div class="form-group">
+            <label for="middleName">Middle Name</label>
+            <input class="form-control" id="middleName" placeholder="Middle Name" @bind="@MiddleName" />
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input class="form-control" id="lastName" placeholder="Last Name" @bind="@LastName" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" />
+        </div>
+    </form>
+
+</div>
+
+@code {
+
+    [Parameter]
+    string Id { get; set; }
+
+    string Name { get; set; }
+
+    string MiddleName { get; set; }
+
+    string LastName { get; set; }
+
+    Client client;
+
+    protected override async Task OnInitAsync()
+    {
+        client = await ClientService.GetAsync(Id);
+        Name = client.Name;
+        MiddleName = client.MiddleName;
+        LastName = client.LastName;
+    }
+
+    async void Submit(UIEventArgs e)
+    {
+        client.Name = Name;
+        client.MiddleName = MiddleName;
+        client.LastName = LastName;
+        await ClientService.AddAsync(client);
+    }
+}

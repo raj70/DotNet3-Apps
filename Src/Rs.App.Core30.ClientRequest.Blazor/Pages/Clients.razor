@@ -1,0 +1,74 @@
+@page  "/clients"
+@using Rs.App.Core30.ClientRequest.Blazor.Data
+@using Rs.App.Core30.ClientRequest.Management.Domain
+@inject ClientService ClientService
+@inject IUriHelper UriHelper
+
+<h3>Clients</h3>
+
+<div class="container">
+
+    @foreach (Client item in clients)
+    {
+        <div class="row">
+            <div class="col-sm">
+                @item.Name
+            </div>
+            <div class="col-sm">
+                @item.MiddleName
+            </div>
+            <div class="col-sm">
+                @item.LastName
+            </div>
+            <div class="col-sm">
+                @*https://docs.microsoft.com/en-au/aspnet/core/blazor/components?view=aspnetcore-3.0#event-handling*@
+                <button class="btn btn-primary" @onclick="@(e => Detail(e, @item.ClientId.ToString()))" data-id="@item.ClientId.ToString()">Detail Client</button>
+            </div>
+
+            <div class="col-sm">
+                <button class="btn btn-dark" @onclick="@(e=> Edit(e, @item.ClientId.ToString()))">Edit Client</button>
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-danger" @onclick="@(e=> Delete(e, item.ClientId.ToString()))">Delete Client</button>
+            </div>
+        </div>
+
+    }
+
+    <div>
+        <button class="btn btn-primary" @onclick="@(e => Add(e))">Add Client</button>
+    </div>
+</div>
+
+@code {
+
+    List<Client> clients;
+
+    protected override async Task OnInitAsync()
+    {
+        clients = new List<Client>();
+        clients = await ClientService.GetClientsAsync();
+    }
+
+    void Detail(UIMouseEventArgs e, string id)
+    {
+        UriHelper.NavigateTo("/client/" + id);
+    }
+
+
+    void Add(UIMouseEventArgs e)
+    {
+        UriHelper.NavigateTo("/client/add");
+    }
+
+
+    void Edit(UIMouseEventArgs e, string id)
+    {
+        UriHelper.NavigateTo("/client/edit/" + id);
+    }
+
+    async void Delete(UIMouseEventArgs e, string id)
+    {
+        await ClientService.DeleteAsync(id);
+    }
+}
