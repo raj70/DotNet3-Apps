@@ -13,12 +13,13 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
 {
     public class ClientRepository : IRepository<Client>
     {
-        private Clients _clients;     
-     
+        private Clients _clients;
+        private IJsonDataFile<Client> _jsonDataFile;
 
         public ClientRepository()
         {
             _clients = new Clients();
+            _jsonDataFile = new JsonDataClient(_clients);
         }
 
         public void Add(Client model)
@@ -26,6 +27,7 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
             if (!_clients.Contains(model))
             {
                 _clients.Add(model);
+                _jsonDataFile.Save();
             }
         }
 
@@ -35,11 +37,19 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
             if(client != null)
             {
                 _clients.Remove(client);
+                _jsonDataFile.Save();
             }
+        }
+
+        public Client Get(Guid id)
+        {
+            var client = _clients.Where(x => x.ClientId == id).FirstOrDefault();
+            return client;
         }
 
         public List<Client> GetAll()
         {
+            _jsonDataFile.Initialise();
             return _clients;
         }
         
@@ -51,19 +61,10 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
                 client.LastName = model.LastName == "" ? client.LastName : model.LastName;
                 client.MiddleName = model.MiddleName == "" ? client.MiddleName : model.MiddleName;
                 client.Name = model.Name == "" ? client.Name : model.Name;
+                _jsonDataFile.Save();
             }
         }
-              
-
-        private string Serialise(Client client)
-        {
-            return JsonNet.Serialize(client);
-        }
-
-        private Client Deserialise(string value)
-        {
-            return JsonNet.Deserialize<Client>(value);
-        }
+            
     }
 
     public class Clients : List<Client>

@@ -28,7 +28,6 @@ namespace Rs.App.Core30.ClientRequest.Wpf
     public partial class MainWindow : Window
     {
         private IRepository<Client> _clientRepo;
-        private IJsonDataFile<Client> _clientDataFile;
         private Client _selectedClient;
         private EditType _editType = EditType.Add;
 
@@ -36,8 +35,6 @@ namespace Rs.App.Core30.ClientRequest.Wpf
         {
             InitializeComponent();
             _clientRepo = new ClientRepository();
-            _clientDataFile = new JsonDataClient(_clientRepo.GetAll() as Clients);
-            _clientDataFile.Initialise();
 
             //yaak // not used MVVM for now
             this.ClientListBox.ItemsSource = _clientRepo.GetAll();
@@ -148,10 +145,6 @@ namespace Rs.App.Core30.ClientRequest.Wpf
             DisableEnable();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            _clientDataFile.Save();
-        }
     }
 
 }

@@ -10,6 +10,8 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
 {
     public class JsonDataClient: IJsonDataFile<Client>
     {
+        private readonly object lock_object = new object();
+
         private Clients _clients;
         private string _fileName;
 
@@ -20,23 +22,35 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
                 return _fileName;
             }
         }
+        public JsonDataClient()
+        {
+            if(_clients == null)
+            {
+                _clients = new Clients();
+            }
 
-        public JsonDataClient(Clients clients)
+            _fileName = "Clients.json";
+        }
+
+        public JsonDataClient(Clients clients) : this()
         {
             _clients = clients;
-            _fileName = "Clients.json";
         }
 
         public void Initialise()
         {
-            if (File.Exists(this._fileName))
+            _fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _fileName);
+            if (File.Exists(_fileName))
             {
                 using (var stream = new StreamReader(_fileName))
                 {
                     var values = stream.ReadToEnd();
                     var clients = JsonConvert.DeserializeObject<Clients>(values);
                     clients.ForEach(x => {
-                        _clients.Add(x);
+                        if (!_clients.Contains(x))
+                        {
+                            _clients.Add(x);
+                        }
                     });
                 }
             }
@@ -44,14 +58,18 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
 
         public void Save()
         {
-            var clientStringfy = JsonNet.Serialize(_clients, new GuidConverter());
-            if (string.IsNullOrWhiteSpace(clientStringfy))
+            lock (lock_object)
             {
-                return;
-            }
-            using (var stream = new StreamWriter(_fileName, false, Encoding.UTF8))
-            {
-                stream.Write(clientStringfy);
+                _fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _fileName);
+                var clientStringfy = JsonNet.Serialize(_clients, new GuidConverter());
+                if (string.IsNullOrWhiteSpace(clientStringfy))
+                {
+                    return;
+                }
+                using (var stream = new StreamWriter(_fileName, false, Encoding.UTF8))
+                {
+                    stream.Write(clientStringfy);
+                }
             }
         }
     }
