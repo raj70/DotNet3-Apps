@@ -1,0 +1,91 @@
+@page "/Requests/{ClientId}"
+@using Rs.App.Core30.ClientRequest.Blazor.Data
+@using Rs.App.Core30.ClientRequest.Management.Domain
+
+@inject RequestService RequestService
+@inject IUriHelper UriHelper
+
+<h3>Requests</h3>
+
+<button class="btn btn-primary" @onclick="@AddRequest">Add New Request</button>
+
+@if (isErrorEncouter)
+{
+    <div class="alert alert-danger">
+        <span class="oi oi-fire"></span>
+        @errorMessage
+    </div>
+}
+
+@if (@clientAndRequest == null)
+{
+    <div class="alert alert-dark">
+        <span class="oi oi-fire"></span>
+        No Client found
+    </div>
+}
+else if (@clientAndRequest.Requests.Count == 0)
+{
+    <div class="alert alert-info">
+        <span class="oi oi-eyedropper"></span>
+        No Request found for  @clientAndRequest.Client.LastName,  @clientAndRequest.Client.Name
+    </div>
+}
+else
+{
+    <div class="container">
+        <h4>Client: @clientAndRequest.Client.LastName, @clientAndRequest.Client.Name</h4>
+
+        @foreach (var request in @clientAndRequest.Requests)
+        {
+
+            <div class="row">
+                <div class="col-sm">
+                    @request.Title
+                </div>
+                <div class="col-sm">
+                    @request.Description
+                </div>
+                <div class="col-sm">
+                    @request.CreatedDate
+                </div>
+                <div class="col-sm">
+                    @request.Priority
+                </div>
+                <div class="col-sm">
+                    <a class="nav-link" href="/RequestDetail/@request.RequestId">Details</a>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    string ClientId { get; set; }
+
+    ClientRequest.Management.ViewModels.ClientRequests clientAndRequest;
+
+    string errorMessage = "";
+    bool isErrorEncouter = false;
+
+    protected override async Task OnInitAsync()
+    {
+        try
+        {
+            clientAndRequest = await RequestService.GetClientRequestsAsync(Guid.Parse(ClientId));
+
+        }
+        catch (Management.Exceptions.ItemNotFoundException ex)
+        {
+            errorMessage = ex.Message;
+            isErrorEncouter = true;
+        }
+    }
+
+
+    private void AddRequest(UIMouseEventArgs e)
+    {
+        UriHelper.NavigateTo("/RequestAdd/" + ClientId);
+    }
+}

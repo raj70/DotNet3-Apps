@@ -1,6 +1,5 @@
 @page  "/Client/Add"
-@using Rs.App.Core30.ClientRequest.Blazor.Data
-@using Rs.App.Core30.ClientRequest.Management.Domain
+
 @inject ClientService ClientService
 
 <h3>Add New Client</h3>
@@ -9,6 +8,13 @@
 </NavLink>
 <div class="container">
 
+    @if (!isValid)
+    {
+        <div class="alert alert-danger">
+            <span class="oi oi-eject"></span>
+            Data are not valid
+        </div>
+    }
     <form @onsubmit="@(e => Submit(e))">
         <div class="form-group">
             <label for="name">Name</label>
@@ -40,6 +46,8 @@
     [Parameter]
     string LastName { get; set; }
 
+    bool isValid = false;
+
     Client client;
 
 
@@ -49,6 +57,15 @@
         client.Name = Name;
         client.MiddleName = MiddleName;
         client.LastName = LastName;
-        await ClientService.AddAsync(client);
+
+        if (client.IsValidate())
+        {
+            await ClientService.AddAsync(client);
+            isValid = true;
+        }
+        else
+        {
+            isValid = false;
+        }
     }
 }

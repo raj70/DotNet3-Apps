@@ -20,6 +20,8 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
         {
             _clients = new Clients();
             _jsonDataFile = new JsonDataClient(_clients);
+
+            _jsonDataFile.Initialise();
         }
 
         public void Add(Client model)
@@ -34,7 +36,7 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
         public void Delete(Guid id)
         {
             var client = _clients.Where(x => x.ClientId == id).FirstOrDefault();
-            if(client != null)
+            if (client != null)
             {
                 _clients.Remove(client);
                 _jsonDataFile.Save();
@@ -49,14 +51,13 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
 
         public List<Client> GetAll()
         {
-            _jsonDataFile.Initialise();
             return _clients;
         }
-        
+
         public void Update(Guid id, Client model)
         {
             var client = _clients.Where(x => x.ClientId == id).FirstOrDefault();
-            if(client != null)
+            if (client != null)
             {
                 client.LastName = model.LastName == "" ? client.LastName : model.LastName;
                 client.MiddleName = model.MiddleName == "" ? client.MiddleName : model.MiddleName;
@@ -64,14 +65,14 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
                 _jsonDataFile.Save();
             }
         }
-            
+
     }
 
     public class Clients : List<Client>
     {
         public Clients()
         {
-            
+
         }
     }
 }

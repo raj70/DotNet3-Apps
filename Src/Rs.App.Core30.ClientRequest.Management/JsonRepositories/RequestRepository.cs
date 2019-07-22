@@ -11,21 +11,16 @@ using System.Text;
 
 namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
 {
-    public interface IRequestRepository: IRepository<Request>
-    {
-        List<Request> GetAll(Guid clientId);
-    }
-
     public class RequestRepository : IRequestRepository
     {
         private Requests _requests;
-        private IJsonDataFile<Request> _jsonDataFile;
-       
+        private IJsonDataFile<Request> _jsonDataFile;       
 
         public RequestRepository()
         {
             _requests = new Requests();
             _jsonDataFile = new JsonDataRequest(_requests);
+            _jsonDataFile.Initialise();
         }
 
         public void Add(Request model)
@@ -40,7 +35,7 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
         public void Delete(Guid id)
         {
             var client = _requests.Where(x => x.RequestId == id).FirstOrDefault();
-            if(client != null)
+            if (client != null)
             {
                 _requests.Remove(client);
                 _jsonDataFile.Save();
@@ -54,8 +49,12 @@ namespace Rs.App.Core30.ClientRequest.Management.JsonRepositories
 
         public List<Request> GetAll(Guid clientId)
         {
-            _jsonDataFile.Initialise();
-            return _requests.Where(x => x.ClientId == clientId).DefaultIfEmpty().ToList();
+            var request = _requests.Where(x => x.ClientId == clientId);
+            if(!request.Any())
+            {
+                request = new List<Request>();
+            }
+            return request.ToList();
         }
 
         public List<Request> GetAll()

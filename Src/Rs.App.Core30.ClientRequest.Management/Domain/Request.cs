@@ -23,6 +23,27 @@ namespace Rs.App.Core30.ClientRequest.Management.Domain
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public RequestPriority Priority { get; set; } = RequestPriority.Low;
 
+        public bool IsValidate()
+        {
+            bool isValid = true;
+
+            if (Guid.Empty == ClientId)
+            {
+                isValid = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(Title))
+            {
+                isValid = false;
+            }
+
+            if (!isValid && string.IsNullOrWhiteSpace(Description))
+            {
+                isValid = false;
+            }
+
+            return isValid;
+        }
         public override bool Equals(object obj)
         {
             bool isEqual = false;
@@ -37,6 +58,11 @@ namespace Rs.App.Core30.ClientRequest.Management.Domain
             }
 
             return isEqual;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

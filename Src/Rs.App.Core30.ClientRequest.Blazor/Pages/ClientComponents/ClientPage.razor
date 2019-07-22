@@ -1,13 +1,16 @@
 @page "/client/{Id}"
 
-@using Rs.App.Core30.ClientRequest.Blazor.Data
-@using Rs.App.Core30.ClientRequest.Management.Domain
 @inject ClientService ClientService
+@inject IUriHelper UriHelper
 
 <h3>Client</h3>
 <NavLink href="/Clients" class="nav-link">
     <span class="oi oi-people" aria-hidden="true"></span> Clients
 </NavLink>
+
+<div>
+    <button @onclick="@ShowAllRequest" class="btn btn-primary">All Requests</button>
+</div>
 <div class="container">
     <form>
         <div class="form-group">
@@ -34,5 +37,10 @@
     protected override async Task OnInitAsync()
     {
         this.client = await ClientService.GetAsync(Id);
+    }
+
+    void ShowAllRequest(UIMouseEventArgs e)
+    {
+        UriHelper.NavigateTo("Requests/" + Id);
     }
 }

@@ -7,6 +7,9 @@
 <h3>Clients</h3>
 
 <div class="container">
+    <div>
+        <button class="btn btn-primary" @onclick="@(e => Add(e))">Add Client</button>
+    </div>
 
     @foreach (Client item in clients)
     {
@@ -32,12 +35,8 @@
                 <button class="btn btn-danger" @onclick="@(e=> Delete(e, item.ClientId.ToString()))">Delete Client</button>
             </div>
         </div>
-
     }
 
-    <div>
-        <button class="btn btn-primary" @onclick="@(e => Add(e))">Add Client</button>
-    </div>
 </div>
 
 @code {

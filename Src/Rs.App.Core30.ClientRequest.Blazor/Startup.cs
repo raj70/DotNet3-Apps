@@ -11,6 +11,7 @@ using Rs.App.Core30.ClientRequest.Blazor.Data;
 using Rs.App.Core30.ClientRequest.Management.Domain;
 using Rs.App.Core30.ClientRequest.Management.JsonRepositories;
 using Rs.App.Core30.ClientRequest.Management.Repositories;
+using Rs.App.Core30.ClientRequest.Management.Services;
 
 namespace Rs.App.Core30.ClientRequest.Blazor
 {
@@ -32,6 +33,10 @@ namespace Rs.App.Core30.ClientRequest.Blazor
             //services.AddSingleton<WeatherForecastService>();
             services.AddScoped<ClientService>();
             services.AddScoped<IRepository<Client>, ClientRepository>();
+
+            services.AddScoped<RequestService>();
+            services.AddScoped<IRequestRepository, RequestRepository>();
+            services.AddScoped<IClientRequestService, ClientRequestService>();
 
         }
 

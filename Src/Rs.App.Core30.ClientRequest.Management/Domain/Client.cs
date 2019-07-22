@@ -20,6 +20,22 @@ namespace Rs.App.Core30.ClientRequest.Management.Domain
         [Required]
         public string LastName { get; set; }
 
+        public bool IsValidate()
+        {
+            bool isValid = true;
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                isValid = false;
+            }
+
+            if (!isValid && string.IsNullOrWhiteSpace(MiddleName))
+            {
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
         public override bool Equals(object obj)
         {
             bool equal = false;
